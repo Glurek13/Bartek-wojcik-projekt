@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameZone - Świat Gier</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🎮 GameZone</div>
+
+    <nav>
+        <a href="#home">Strona główna</a>
+        <a href="#games">Gry</a>
+        <a href="#reviews">Recenzje</a>
+        <a href="#about">O nas</a>
+    </nav>
+
+    <div class="search">
+        <input type="text" id="searchInput" placeholder="Szukaj gry...">
+        <button onclick="searchGames()">🔍</button>
+    </div>
+</header>
+
+<section class="hero" id="home">
+    <div class="hero-content">
+        <h1>Świat gier w jednym miejscu</h1>
+        <p>
+            Odkrywaj najnowsze gry, sprawdzaj oceny,
+            czytaj recenzje i znajdź swój kolejny ulubiony tytuł.
+        </p>
+        <a href="#games" class="hero-button">Zobacz gry</a>
+    </div>
+</section>
+
+<section class="categories">
+    <h2>Kategorie</h2>
+
+    <div class="category-list">
+        <button onclick="filterGames('Akcja')">⚔️ Akcja</button>
+        <button onclick="filterGames('RPG')">🧙 RPG</button>
+        <button onclick="filterGames('Sportowe')">⚽ Sportowe</button>
+        <button onclick="filterGames('Strategiczne')">♟️ Strategiczne</button>
+        <button onclick="filterGames('Wyścigowe')">🏎️ Wyścigowe</button>
+        <button onclick="showAllGames()">Wszystkie</button>
+    </div>
+</section>
+
+<section class="games-section" id="games">
+    <h2>Popularne gry</h2>
+
+    <div class="games-container" id="gamesContainer">
+
+        <div class="game-card" data-category="RPG" data-name="Elden Ring">
+            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80" alt="Elden Ring">
+            <div class="game-info">
+                <span class="category">RPG</span>
+                <h3>Elden Ring</h3>
+                <p>Wielki świat fantasy pełen niebezpiecznych przeciwników i tajemnic.</p>
+                <div class="rating">⭐ 9.5/10</div>
+            </div>
+        </div>
+
+        <div class="game-card" data-category="Akcja" data-name="Cyberpunk 2077">
+            <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=800&q=80" alt="Cyberpunk 2077">
+            <div class="game-info">
+                <span class="category">Akcja</span>
+                <h3>Cyberpunk 2077</h3>
+                <p>Futurystyczna przygoda w ogromnym mieście Night City.</p>
+                <div class="rating">⭐ 8.0/10</div>
+            </div>
+        </div>
+
+        <div class="game-card" data-category="Sportowe" data-name="EA Sports FC">
+            <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80" alt="EA Sports FC">
+            <div class="game-info">
+                <span class="category">Sportowe</span>
+                <h3>EA Sports FC</h3>
+                <p>Popularna seria piłkarska oferująca setki drużyn i zawodników.</p>
+                <div class="rating">⭐ 8.5/10</div>
+            </div>
+        </div>
+
+        <div class="game-card" data-category="Strategiczne" data-name="Civilization VI">
+            <img src="https://images.unsplash.com/photo-1585504198193-0501f8c4f0f7?auto=format&fit=crop&w=800&q=80" alt="Civilization VI">
+            <div class="game-info">
+                <span class="category">Strategiczne</span>
+                <h3>Civilization VI</h3>
+                <p>Buduj własną cywilizację i prowadź ją przez kolejne epoki.</p>
+                <div class="rating">⭐ 8.8/10</div>
+            </div>
+        </div>
+
+        <div class="game-card" data-category="Wyścigowe" data-name="Forza Horizon">
+            <img src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=800&q=80" alt="Forza Horizon">
+            <div class="game-info">
+                <span class="category">Wyścigowe</span>
+                <h3>Forza Horizon</h3>
+                <p>Dynamiczne wyścigi, otwarty świat i setki samochodów.</p>
+                <div class="rating">⭐ 9.2/10</div>
+            </div>
+        </div>
+
+        <div class="game-card" data-category="Akcja" data-name="God of War">
+            <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=800&q=80" alt="God of War">
+            <div class="game-info">
+                <span class="category">Akcja</span>
+                <h3>God of War</h3>
+                <p>Epicka przygoda Kratosa i Atreusa osadzona w świecie mitologii.</p>
+                <div class="rating">⭐ 9.6/10</div>
+            </div>
+        </div>
+
+    </div>
+
+    <p id="noResults" class="no-results">
+        Nie znaleziono żadnej gry.
+    </p>
+</section>
+
+<section class="reviews" id="reviews">
+    <h2>Najnowsze recenzje</h2>
+
+    <div class="review-container">
+
+        <div class="review">
+            <div class="review-top">
+                <span>🎮 Elden Ring</span>
+                <strong>9.5/10</strong>
+            </div>
+            <p>
+                „Niesamowity świat, wymagająca walka i ogromna liczba
+                sekretów. Gra potrafi wciągnąć na wiele godzin.”
+            </p>
+            <small>Autor: Gamer123</small>
+        </div>
+
+        <div class="review">
+            <div class="review-top">
+                <span>🎮 Cyberpunk 2077</span>
+                <strong>9.0/10</strong>
+            </div>
+            <p>
+                „Świetna atmosfera, ciekawa historia oraz ogromne
+                futurystyczne miasto do eksplorowania.”
+            </p>
+            <small>Autor: NightPlayer</small>
+        </div>
+
+        <div class="review">
+            <div class="review-top">
+                <span>🎮 God of War</span>
+                <strong>9.6/10</strong>
+            </div>
+            <p>
+                „Świetna fabuła, widowiskowe walki i bardzo dobrze
+                napisane postacie.”
+            </p>
+            <small>Autor: PlayMaster</small>
+        </div>
+
+    </div>
+</section>
+
+<section class="about" id="about">
+    <h2>O GameZone</h2>
+    <p>
+        GameZone to miejsce stworzone dla wszystkich miłośników gier.
+        Znajdziesz tutaj informacje o popularnych tytułach, oceny,
+        recenzje oraz najważniejsze informacje dotyczące świata gier.
+    </p>
+</section>
+
+<footer>
+    <p>© 2026 GameZone | Wszystkie prawa zastrzeżone</p>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
