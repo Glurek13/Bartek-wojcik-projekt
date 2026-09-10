@@ -1,1 +1,1 @@
-# Bartek-wojhcik-projekt
+# Bartek-wojcik-projekt
