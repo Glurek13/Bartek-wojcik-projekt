@@ -110,3 +110,36 @@ footer { background: #08080d; text-align: center; padding: 25px; color: #777; }
     .about { padding: 50px 10%; }
     .search input { width: 140px; }
 }
+
+/* Formularze, logowanie, rejestracja i recenzje — dodatki do stylu GameZone */
+[hidden] { display: none !important; }
+.auth-section { max-width: 1100px; margin: 0 auto; padding: 60px 5%; }
+.auth-page { max-width: 620px; min-height: calc(100vh - 170px); display: flex; flex-direction: column; justify-content: center; }
+.auth-section > h2, .auth-page > h2 { text-align: center; }
+.auth-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.form-panel { display: flex; flex-direction: column; gap: 10px; background: #181824; border: 1px solid #303044; border-radius: 10px; padding: 26px; box-shadow: 0 12px 35px rgba(0,0,0,.18); }
+.form-panel h3 { margin-bottom: 8px; font-size: 22px; }
+.form-panel label { color: #ddd; font-size: 14px; }
+.form-panel input, .form-panel select, .form-panel textarea { width: 100%; min-width: 0; padding: 12px; border: 1px solid #39394d; border-radius: 6px; background: #101019; color: white; font: inherit; margin-bottom: 8px; }
+.form-panel input:focus, .form-panel select:focus, .form-panel textarea:focus { outline: 2px solid #7c4dff; outline-offset: 1px; }
+.form-panel textarea { resize: vertical; }
+.form-panel button, .auth-status button { padding: 12px 16px; border: 0; border-radius: 6px; background: #7c4dff; color: white; font-weight: bold; cursor: pointer; transition: .25s; }
+.form-panel button:hover, .auth-status button:hover { background: #6035d9; transform: translateY(-1px); }
+.auth-single { width: 100%; max-width: 520px; margin: 0 auto; }
+.auth-single p { color: #aaa; text-align: center; margin-top: 8px; }
+.auth-single a { color: #b5a0ff; }
+.auth-single a:hover { color: white; }
+.auth-status { display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; padding: 18px; border: 1px solid #39394d; border-radius: 8px; background: #151520; }
+.form-message { text-align: center; margin: 12px 0; color: #bfb2ff; }
+.form-message.error { color: #ff8585; }
+.form-message.success { color: #8ee6a2; }
+.review-form-wrap { max-width: 760px; margin: 0 auto 28px; }
+.review-login-hint { text-align: center; color: #aaa; margin: 0 0 25px; }
+.review-container > p { color: #aaa; text-align: center; }
+button, input, select, textarea { font-family: inherit; }
+@media (max-width: 650px) {
+  .auth-grid { grid-template-columns: 1fr; }
+  .auth-section { padding: 45px 5%; }
+  .form-panel { padding: 20px; }
+}
+

@@ -1,31 +1,17 @@
-GAMEZONE — wersja pobierająca dane z MySQL/MariaDB
-=================================================
+GAMEZONE — naprawiona paczka (osobne strony, CSS i baza danych)
 
-Pliki:
-- index.html  — struktura strony
-- style.css   — style strony
-- script.js   — pobiera dane z API i tworzy karty gier, kategorie oraz recenzje
-- api.php     — API PHP łączące się z bazą
-- gamezone.sql — Twój zrzut bazy danych (jeśli dołączysz go osobno do folderu)
-
-INSTALACJA (XAMPP / Windows)
-1. Zainstaluj/uruchom XAMPP.
-2. Uruchom Apache i MySQL.
-3. Skopiuj folder gamezone_dynamic do C:\xampp\htdocs\
-4. Otwórz http://localhost/phpmyadmin
-5. Wybierz Importuj i zaimportuj swój plik gamezone.sql. Plik tworzy bazę `gamezone`.
-6. Otwórz api.php i sprawdź ustawienia:
-   $dbHost = '127.0.0.1';
-   $dbName = 'gamezone';
-   $dbUser = 'root';
-   $dbPassword = '';
-   Jeśli konto MySQL ma hasło, wpisz je w $dbPassword.
-7. Wejdź na http://localhost/gamezone_dynamic/
+INSTALACJA OD ZERA
+1. Rozpakuj folder gamezone_dynamic do C:\xampp\htdocs\
+2. Uruchom Apache i MySQL w XAMPP.
+3. Wejdź na http://localhost/phpmyadmin/ i utwórz bazę `gamezone` z kodowaniem utf8mb4_polish_ci (jeśli jej nie ma).
+4. Kliknij bazę `gamezone` -> Importuj -> wybierz plik gamezone.sql z tej paczki -> Wykonaj. Ten plik zawiera gry, kategorie, recenzje oraz tabelę użytkowników.
+5. W api.php sprawdź ustawienia połączenia: host 127.0.0.1, baza gamezone, użytkownik root, hasło puste (typowe ustawienia XAMPP). Jeśli masz inne hasło, zmień $dbPassword.
+6. Otwórz http://localhost/gamezone_dynamic/ — nie otwieraj plików przez dwuklik ani file://.
 
 WAŻNE
-- Nie otwieraj index.html przez dwuklik (file://). PHP musi działać przez Apache/serwer PHP.
-- Test API: http://localhost/gamezone_dynamic/api.php?action=all
-  Powinien wyświetlić JSON z grami, kategoriami i recenzjami.
-- Kategorie, wyszukiwanie i recenzje są generowane na podstawie danych z bazy.
-- Ten projekt tylko odczytuje dane; nie ma formularza dodawania/edycji gier.
-- W przypadku błędu sprawdź konfigurację bazy, czy zaimportowano SQL i czy PDO MySQL jest włączone.
+- Dla świeżej instalacji importuj tylko gamezone.sql. Nie importuj migration_login_reviews.sql, bo aktualny gamezone.sql już zawiera wymagane tabele i kolumny.
+- Jeśli masz już działającą bazę z danymi, nie importuj ponownie gamezone.sql, bo może się nie zaimportować z powodu istniejących tabel. Zrób kopię bazy i dopiero wtedy wykonaj migrację odpowiednią do jej stanu.
+- W razie problemu z bazą sprawdź w phpMyAdmin, czy istnieją tabele users, games, categories i reviews.
+- index.php jest dostępny tylko po zalogowaniu; niezalogowany użytkownik zostaje przekierowany do login.php. Po rejestracji/logowaniu trafia na index.php.
+- style.css ma dopisany parametr wersji w linkach (style.css?v=3), aby wymusić pobranie aktualnego CSS.
+- Wymagane PHP z PDO MySQL, sesjami i mbstring.

@@ -1,0 +1,4 @@
+-- NIE URUCHAMIAJ TEGO PLIKU przy nowej instalacji.
+-- Aktualny gamezone.sql zawiera już tabelę users oraz kolumnę reviews.user_id.
+-- Ten plik pozostaje wyłącznie dla osób aktualizujących starszą bazę, która nie ma jeszcze tych elementów.
+-- Jeśli tabela users lub kolumna user_id już istnieje, nie uruchamiaj migracji ponownie.
