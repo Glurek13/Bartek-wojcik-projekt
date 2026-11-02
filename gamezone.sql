@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Paź 29, 2026 at 11:10 AM
+-- Generation Time: Lis 02, 2026 at 10:15 AM
 -- Wersja serwera: 10.11.16-MariaDB
 -- Wersja PHP: 8.5.12
 
@@ -111,7 +111,8 @@ INSERT INTO `reviews` (`id`, `game_id`, `author`, `user_id`, `content`, `rating`
 (9, 9, 'to_nie_Sał*tka', 0, 'sper gra dosfalem za drmo robale za kompiejk polecum', 10.0, '2026-10-22 08:47:27'),
 (10, 10, 'Senko', 0, 'Mayano to moja waifu i nikt nie będzie hejtował mojego ukochanego lotniczego karła + mommy creek pls give milk.', 8.9, '2026-10-22 09:08:07'),
 (11, 11, 'spocynymaciuś123', 0, 'Ta gra jest okropna!!! Grają w nią same spocuchy cuchnące nie wychodzące z pokoju 24/7 ALE pieniądze które zostawiłem w tej grze już nigdy nie wrócą :( liczba pieniędzy spłaciła by kredyt mojej matki i ojca. Jedyna rzecz ktgóra trzyma mnie w tej grze tyo moje wydane pieniądze na skin. ', 7.6, '2026-10-22 09:19:37'),
-(12, 9, 'Cirno', 1, 'spotkałem sałatke na multiplayerze, mam teraz depresje', 1.0, '2026-10-29 09:11:22');
+(12, 9, 'Cirno', 1, 'spotkałem sałatke na multiplayerze, mam teraz depresje', 1.0, '2026-10-29 09:11:22'),
+(13, 10, 'Cirno', 1, 'PETA MÓWI ŻE TO KRZYWDZENIE ZWIERZĄT!!!!!! DO DIAŁBA Z NIMI DAJCE 500ZŁ RYDZYKOWI NA RADIO MARYJA', 1.0, '2026-11-02 09:06:39');
 
 -- --------------------------------------------------------
 
@@ -132,7 +133,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `created_at`) VALUES
-(1, 'Cirno', 'ass8@gmail.com', '$2y$12$niINPwyzNFI.0xlY3fPHsum3L5qcJbVSwcxTg1qlKVsAJBjK4ZvxS', '2026-10-29 09:10:44');
+(1, 'Cirno', 'ass8@gmail.com', '$2y$12$pOtochIDP8Bw5JeFvw.2deX1lr9SVizw2uMGTvC1dFmNQSMxs9f3O', '2026-10-29 09:10:44'),
+(2, 'dddd', 'dd34@gmail.com', '$2y$12$fxeFCPx/.aY6UP5WAIHO2uVHArJS/juyx8ne1F0crJUa8wbeUfpiy', '2026-11-02 08:59:45');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -187,13 +189,13 @@ ALTER TABLE `games`
 -- AUTO_INCREMENT dla tabeli `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT dla tabeli `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Ograniczenia dla zrzutów tabel
