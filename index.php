@@ -8,6 +8,10 @@ if (empty($_SESSION["user_id"])) {
 <!DOCTYPE html>
 <html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>GameZone - Świat Gier</title><link rel="stylesheet" href="style.css?v=3"><script src="script.js?v=5" defer></script></head>
 <body>
+
+<a href="index.php">
+  <img src="logo.png" alt="gamezone - Logo" width="150" height="50">
+</a>>
 <header><div class="logo">🎮 GameZone</div><nav><a href="#home">Strona główna</a><a href="#games">Gry</a><a href="#reviews">Recenzje</a><a href="logout.php">Wyloguj się</a><a href="#about">O nas</a></nav><form class="search" id="searchForm"><input type="search" id="searchInput" placeholder="Szukaj gry..." aria-label="Szukaj gry"><button type="submit">🔍</button></form></header>
 <section class="hero" id="home"><div class="hero-content"><h1>Świat gier w jednym miejscu</h1><p>Odkrywaj gry, sprawdzaj oceny, czytaj recenzje i znajdź swój kolejny ulubiony tytuł.</p><a href="#games" class="hero-button">Zobacz gry</a></div></section>
 <section class="categories"><h2>Kategorie</h2><div class="category-list" id="categoryList"><p>Ładowanie kategorii...</p></div></section>
