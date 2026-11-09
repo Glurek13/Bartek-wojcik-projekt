@@ -1,7 +1,7 @@
 <<<<<<< HEAD
 # Bartek-wojcik-projekt
 =======
-# Bartek-wojhcik-projekt
+# Bartek-wojcik-projekt
 >>>>>>> 8b9a260 (dodano wstępny szkielet projektu)
 Projekt przedstawia nowoczesną stronę internetową poświęconą grom komputerowym i konsolowym. Jej głównym celem jest stworzenie miejsca, w którym użytkownicy mogą znaleźć informacje o najnowszych grach, przeczytać recenzje, sprawdzić oceny oraz dowiedzieć się więcej o popularnych tytułach.
 
