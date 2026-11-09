@@ -1,0 +1,34 @@
+GAMEZONE — JAWNE HASŁA (TYLKO LOKALNY PROJEKT SZKOLNY)
+
+WERSJA DO TESTÓW. HASŁA SĄ WIDOCZNE W phpMyAdmin.
+Nie publikuj tej wersji w internecie. Nie używaj prawdziwych ani
+powtarzanych haseł. Osoba z dostępem do bazy zobaczy wszystkie hasła.
+
+JEŻELI MASZ JUŻ BAZĘ gamezone Z KONTAMI:
+1. Zrób kopię bazy: phpMyAdmin -> Eksport.
+2. Skopiuj pliki projektu do C:\xampp\htdocs\gamezone_dynamic\.
+3. Otwórz phpMyAdmin, wybierz bazę gamezone, zakładka Import.
+4. Zaimportuj WYŁĄCZNIE migration_plain_password.sql. Nie importuj ponownie
+   gamezone.sql ani favorites_migration.sql, jeżeli tabela favorites już istnieje.
+5. UWAGA: Stare hasła nie mogą zostać odzyskane z hashy. Dla każdego
+   dotychczasowego użytkownika należy ustawić NOWE hasło ręcznie w phpMyAdmin
+   (tabela users -> Przeglądaj -> Edytuj -> kolumna password).
+   Przy edycji pola password ustaw funkcję SQL na brak/none, po prostu tekst.
+   Zamiast tego możesz wykonać SQL dla własnego adresu:
+   UPDATE users SET password='MojeTestoweHaslo123!' WHERE email='twoj@email.pl';
+   Własne hasło wstaw w cudzysłowie apostrofowym i nie używaj ważnych haseł.
+6. Nowi użytkownicy rejestrują się normalnie; ich hasła będą widoczne w users.password.
+7. Otwórz http://localhost/gamezone_dynamic/ i przetestuj rejestrację/logowanie.
+
+JEŚLI TWORZYSZ NOWĄ BAZĘ OD ZERA:
+1. Utwórz pustą bazę gamezone w phpMyAdmin.
+2. Zaimportuj gamezone.sql (nowa wersja zawiera users.password).
+3. Zaimportuj favorites_migration.sql (tworzy tabelę ulubionych).
+4. Nie importuj migration_plain_password.sql — nie ma starej kolumny z hashem.
+5. Otwórz projekt przez http://localhost/, nie przez file://.
+
+SKUTEK MIGRACJI: usunięta zostanie kolumna password_hash. Konta zachowują
+nazwy, e-maile i powiązane recenzje / ulubione, ale stare hasła przestaną
+obowiązywać, dopóki nie ustawisz nowych.
+
+Dla realnej strony internetowej wróć do password_hash()/password_verify().

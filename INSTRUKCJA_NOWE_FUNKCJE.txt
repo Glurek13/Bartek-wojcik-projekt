@@ -1,0 +1,19 @@
+GAMEZONE — FILTROWANIE I ULUBIONE
+
+1. Zrób kopię obecnego folderu GameZone oraz bazy MySQL.
+2. Skopiuj pliki projektu do C:\xampp\htdocs\gamezone_dynamic\.
+3. Uruchom Apache i MySQL w XAMPP.
+4. W phpMyAdmin wybierz ISTNIEJĄCĄ bazę gamezone, zakładka Import,
+   zaimportuj TYLKO favorites_migration.sql.
+   Nie importuj ponownie gamezone.sql (możesz utracić dane).
+5. Wejdź na http://localhost/gamezone_dynamic/ i zaloguj się.
+6. W sekcji Gry możesz łączyć: wyszukiwanie, kategorię, minimalną ocenę,
+   sortowanie i opcję Tylko ulubione.
+7. Kliknij serce ♡ przy grze. Ulubione są zapisywane w MySQL osobno dla konta.
+8. W menu wybierz ❤️ Ulubione, aby zobaczyć swoją listę.
+9. Jeśli widzisz stary wygląd, odśwież stronę Ctrl+F5.
+
+UWAGA: ocena w filtrze korzysta z pola games.rating istniejącego w bazie.
+Nie dodano filtrów daty premiery i platformy, ponieważ tych danych nie ma
+w aktualnym schemacie gier. Sortowanie „Najnowsze w katalogu” dotyczy ID,
+a nie daty premiery gry.

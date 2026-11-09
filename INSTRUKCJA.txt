@@ -1,0 +1,3 @@
+GameZone — wersja szkolna z jawnymi hasłami.
+ZACZNIJ OD PLIKU INSTRUKCJA_HASLA.txt.
+Ta wersja nie nadaje się do umieszczania na publicznym serwerze.

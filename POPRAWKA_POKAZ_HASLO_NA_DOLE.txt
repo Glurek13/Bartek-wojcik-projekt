@@ -1,0 +1,11 @@
+GAMEZONE — Przycisk Pokaż hasło pod polem (9.11.2026)
+
+1. Rozpakuj ZIP i skopiuj pliki do C:\xampp\htdocs\gamezone_dynamic\
+2. Zastąp poprzednie pliki. Jeśli instalujesz samą poprawkę,
+   podmień style.css, login.php i register.php.
+3. Otwórz http://localhost/gamezone_dynamic/login.php
+4. Naciśnij Ctrl+F5 jeśli widzisz starą wersję strony.
+
+Przycisk Pokaż/Ukryj hasło znajduje się POD polem hasła, po prawej stronie.
+Działanie przycisku w auth-page.js pozostaje bez zmian.
+Nie trzeba aktualizować bazy danych.

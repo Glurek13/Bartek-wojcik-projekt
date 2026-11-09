@@ -36,3 +36,15 @@ if (registerForm) registerForm.addEventListener("submit", async event => {
         window.location.href = "index.php";
     } catch (error) { showMessage(error.message, true); }
 });
+
+// Pokaż/ukryj hasło na obu stronach; nie wysyła formularza.
+document.querySelectorAll('[data-toggle-password]').forEach(button => {
+    const field = document.getElementById(button.dataset.togglePassword);
+    if (!field) return;
+    button.addEventListener('click', () => {
+        const visible = field.type === 'password';
+        field.type = visible ? 'text' : 'password';
+        button.textContent = visible ? 'Ukryj hasło' : 'Pokaż hasło';
+        button.setAttribute('aria-pressed', String(visible));
+    });
+});

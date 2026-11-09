@@ -143,3 +143,61 @@ button, input, select, textarea { font-family: inherit; }
   .form-panel { padding: 20px; }
 }
 
+
+/* Filtry i ulubione – zachowany motyw GameZone */
+.filter-panel{max-width:1200px;margin:0 auto 30px;padding:20px;display:flex;flex-wrap:wrap;align-items:end;gap:16px;background:#171722;border:1px solid #39394d;border-radius:10px}
+.filter-panel label{display:flex;flex-direction:column;gap:8px;color:#ddd;font-size:14px;flex:1 1 185px}
+.filter-panel select{background:#101019;color:#fff;border:1px solid #45455e;border-radius:6px;padding:11px;width:100%}
+.filter-panel .filter-check{flex:0 1 auto;flex-direction:row;align-items:center;gap:9px;padding:11px 0;cursor:pointer}
+.filter-panel .filter-check input{accent-color:#7c4dff;width:17px;height:17px}
+.filter-panel button{background:#7c4dff;border:0;color:white;border-radius:6px;padding:12px 18px;cursor:pointer}
+.filter-panel button:hover{background:#6035d9}
+.game-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.favorite-btn{border:1px solid #45455e;border-radius:50%;background:#25253b;color:#eee;font-size:25px;width:43px;height:43px;cursor:pointer;line-height:1}
+.favorite-btn:hover,.favorite-btn.is-favorite{color:#ff709a;border-color:#ff709a;background:#382236}
+.favorite-btn:disabled{opacity:.5;cursor:wait}
+.favorites-section{background:#101019;border-top:1px solid #252538}
+@media(max-width:600px){.filter-panel{padding:14px}.filter-panel label{flex-basis:100%}}
+
+/* Opcja pokazania hasła */
+.show-password-label { display:flex; align-items:center; gap:9px; cursor:pointer; margin: 0 0 10px; }
+.form-panel .show-password-label input[type="checkbox"] { width:auto; margin:0; accent-color:#7c4dff; }
+
+
+/* Przycisk Pokaż/Ukryj hasło POD polem hasła (logowanie i rejestracja) */
+.form-panel .password-field {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 9px;
+}
+.form-panel .password-field > input {
+    width: 100%;
+    margin-bottom: 0;
+    padding: 12px;
+}
+.form-panel .password-field > .password-toggle {
+    position: static;
+    align-self: flex-end;
+    width: auto;
+    max-width: 100%;
+    padding: 8px 14px;
+    border: 1px solid #5c4b9f;
+    border-radius: 6px;
+    background: #302354;
+    color: #fff;
+    white-space: nowrap;
+    font-size: 13px;
+    line-height: 1.35;
+    font-weight: 600;
+    cursor: pointer;
+}
+.form-panel .password-field > .password-toggle:hover {
+    background: #6f41e6;
+}
+.form-panel .password-field > .password-toggle:focus-visible {
+    outline: 2px solid #a68dff;
+    outline-offset: 2px;
+}

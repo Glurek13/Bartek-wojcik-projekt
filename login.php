@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Logowanie — GameZone</title><link rel="stylesheet" href="style.css?v=3"><script src="auth-page.js" defer></script></head>
-<body>
-<a href="index.php">
-  <img src="logo.png" alt="gamezone - Logo" width="150" height="50">
-</a>>    
-<header><a class="logo" href="index.php" style="text-decoration:none">🎮 GameZone</a><nav><a href="index.php">Strona główna</a><a href="index.php#games">Gry</a><a href="register.php">Rejestracja</a></nav></header>
-<main class="auth-section auth-page"><h2>Logowanie</h2><p id="pageMessage" class="form-message" role="status"></p><form id="loginForm" class="form-panel auth-single"><label for="email">Adres e-mail</label><input id="email" name="email" type="email" autocomplete="email" maxlength="190" required><label for="password">Hasło</label><input id="password" name="password" type="password" autocomplete="current-password" required><button type="submit">Zaloguj się</button><p>Nie masz konta? <a href="register.php">Zarejestruj się</a></p></form></main><footer><p>© 2026 GameZone</p></footer></body></html>
+<html lang="pl"><head>
+<link rel="icon" type="image/jpeg" href="logo.jpg">    
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Logowanie — GameZone</title><link rel="stylesheet" href="style.css?v=13"><script src="auth-page.js?v=12" defer></script></head>
+<body><header><a class="logo" href="index.php" style="text-decoration:none">🎮 GameZone</a><nav><a href="index.php">Strona główna</a><a href="index.php#games">Gry</a><a href="register.php">Rejestracja</a></nav></header>
+<main class="auth-section auth-page"><h2>Logowanie</h2><p id="pageMessage" class="form-message" role="status"></p><form id="loginForm" class="form-panel auth-single"><label for="email">Adres e-mail</label><input id="email" name="email" type="email" autocomplete="email" maxlength="190" required><label for="password">Hasło</label><div class="password-field"><input id="password" name="password" type="password" autocomplete="current-password" required><button type="button" class="password-toggle" data-toggle-password="password" aria-controls="password" aria-pressed="false">Pokaż hasło</button></div><button type="submit">Zaloguj się</button><p>Nie masz konta? <a href="register.php">Zarejestruj się</a></p></form></main><footer><p>© 2026 GameZone</p></footer></body></html>

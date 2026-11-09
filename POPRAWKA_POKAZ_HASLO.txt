@@ -1,0 +1,19 @@
+GAMEZONE — POPRAWKA PRZYCISKU POKAŻ HASŁO
+
+Naprawiono przełącznik Pokaż hasło / Ukryj hasło w login.php i register.php.
+Przycisk NIE wysyła formularza; pokazuje aktualnie wpisane hasło.
+W plikach PHP dodano numer wersji do CSS i auth-page.js, żeby ominąć pamięć podręczną przeglądarki.
+
+INSTALACJA:
+1. Zrób kopię folderu projektu.
+2. Wgraj CAŁĄ zawartość folderu gamezone_dynamic do C:\xampp\htdocs\gamezone_dynamic\, zastępując stare pliki.
+   Dla małej aktualizacji wystarczy podmienić: login.php, register.php, auth-page.js, style.css.
+3. Uruchom Apache w XAMPP.
+4. Otwórz http://localhost/gamezone_dynamic/login.php lub .../register.php.
+5. Wpisz testowe hasło i kliknij Pokaż hasło. Powinno zmienić się na Ukryj hasło.
+6. Jeśli przeglądarka pokazuje starą stronę, użyj Ctrl+F5.
+
+Nie zmieniaj MySQL ani nie importuj SQL, jeśli chcesz wyłącznie naprawić przycisk.
+Osobną sprawą jest wyświetlanie hasła w phpMyAdmin: przy wersji jawnych haseł
+sprawdź tabelę users, kolumnę password i czy migracja została wykonana.
+UWAGA: zapisywanie haseł jawnym tekstem jest niebezpieczne — tylko do lokalnych demonstracji.
