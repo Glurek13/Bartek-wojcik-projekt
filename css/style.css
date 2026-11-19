@@ -158,3 +158,20 @@ footer { padding: 22px; text-align: center; color: var(--muted); background: #08
 .interaction-status { position: fixed; z-index: 20; right: 16px; bottom: 16px; max-width: calc(100vw - 32px); padding: 10px 14px; border: 1px solid #51436d; border-radius: 8px; background: #221a32; color: white; box-shadow: 0 6px 18px #0006; pointer-events: none; }
 .interaction-status:empty { padding: 0; border: 0; box-shadow: none; }
 .interaction-status.error { border-color: #95546b; background: #452536; color: #ffe0e9; }
+
+/* Aktualności */
+.news-page { width: min(92%, 1120px); min-height: 67vh; margin: auto; padding: 38px 0 64px; }
+.news-intro { margin-bottom: 28px; }
+.news-intro .category { margin-bottom: 8px; }
+.news-intro h1, .news-page > h1, .news-article h1 { margin: 0 0 14px; font-size: clamp(29px, 6vw, 46px); overflow-wrap: anywhere; }
+.news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr)); gap: 18px; }
+.news-card { border-top: 3px solid #7c4dff; }
+.news-card h2 { margin: 14px 0 9px; font-size: 22px; overflow-wrap: anywhere; }
+.news-card h2 a { color: #fff; text-underline-offset: 4px; }
+.news-card h2 a:hover { color: var(--pale); }
+.news-card p, .news-summary { color: var(--muted); overflow-wrap: anywhere; }
+.news-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; margin-bottom: 16px; color: var(--muted); font-size: 13px; }
+.news-tag { padding: 3px 8px; border: 1px solid #574178; border-radius: 6px; background: #2c2046; color: var(--pale); font-weight: bold; }
+.news-back { display: inline-block; margin-bottom: 18px; }
+.news-article { max-width: 800px; }
+.news-body { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); white-space: pre-wrap; overflow-wrap: anywhere; }

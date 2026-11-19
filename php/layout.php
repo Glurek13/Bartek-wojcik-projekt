@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/footer-ads.php';
+
 function pageStart(string $title, string $page, ?array $user = null): void
 {
     ?>
@@ -10,7 +12,8 @@ function pageStart(string $title, string $page, ?array $user = null): void
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= h($title) ?> — GameZone</title>
     <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
-    <link rel="stylesheet" href="../css/style.css?v=3">
+    <link rel="stylesheet" href="../css/style.css?v=4">
+    <link rel="stylesheet" href="../css/footer-ad.css?v=3">
     <script src="../js/script.js?v=3" defer></script>
 </head>
 <body>
@@ -20,9 +23,13 @@ function pageStart(string $title, string $page, ?array $user = null): void
     <nav aria-label="Menu główne">
         <a href="index.php">Strona główna</a>
         <a href="index.php#games">Gry</a>
+        <a href="news.php"<?= $page === 'news' ? ' aria-current="page"' : '' ?>>Aktualności</a>
         <a href="index.php#reviews">Recenzje</a>
         <a href="index.php#favorites">Ulubione</a>
         <a href="index.php#about">O nas</a>
+        <?php if (footerAdAdminAllowed($user)): ?>
+        <a href="footer-ad-admin.php"<?= $page === 'ad-admin' ? ' aria-current="page"' : '' ?>>Reklamy</a>
+        <?php endif; ?>
     </nav>
     <div class="header-actions">
         <?php if ($page === 'home'): ?>
@@ -47,7 +54,28 @@ function pageStart(string $title, string $page, ?array $user = null): void
 
 function pageEnd(): void
 {
-    echo '<footer>© ' . h(date('Y')) . ' GameZone</footer><p id="interactionStatus" class="interaction-status" role="status" aria-atomic="true"></p></body></html>';
+    $ad = footerAdForPage();
+    ?>
+<footer>© <?= h(date('Y')) ?> GameZone</footer>
+<p id="interactionStatus" class="interaction-status" role="status" aria-atomic="true"></p>
+<?php if ($ad !== null): ?>
+<aside class="gz-footer-ad" aria-label="Reklama">
+    <a class="gz-footer-ad__link" href="<?= h($ad['target_url']) ?>">
+        <img class="gz-footer-ad__image" src="<?= h('footer-ad-image.php?id=' . $ad['id']) ?>"
+             alt="" width="128" height="64" loading="lazy" decoding="async">
+        <span class="gz-footer-ad__copy">
+            <span class="gz-footer-ad__label">Reklama</span>
+            <strong class="gz-footer-ad__title"><?= h($ad['title']) ?></strong>
+        </span>
+        <span class="gz-footer-ad__cta" aria-hidden="true">
+            <span>Otwórz</span> ↗
+        </span>
+    </a>
+</aside>
+<?php endif; ?>
+</body>
+</html>
+    <?php
 }
 
 function reviewCard(array $review, int $viewer, string $from, bool $standalone = false): void
