@@ -29,12 +29,14 @@ try {
 $data = $row['image_data'] ?? null;
 $image = is_string($data) ? @getimagesizefromstring($data) : false;
 $mime = $image['mime'] ?? '';
-if (!in_array($mime, ['image/jpeg', 'image/png', 'image/webp'], true)) {
+if (!in_array($mime, ['image/jpeg', 'image/png', 'image/webp', 'image/gif'], true)) {
     http_response_code(404);
     exit;
 }
 
 header('Content-Type: ' . $mime);
 header('X-Content-Type-Options: nosniff');
+// Nie buforuj starej wersji grafiki po jej zmianie w bazie.
+header('Cache-Control: private, no-store');
 header('Content-Length: ' . strlen($data));
 echo $data;

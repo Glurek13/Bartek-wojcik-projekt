@@ -17,7 +17,7 @@ function uploadedFooterAdImage(?array $file): string
 {
     $error = $file['error'] ?? UPLOAD_ERR_NO_FILE;
     if ($error === UPLOAD_ERR_INI_SIZE || $error === UPLOAD_ERR_FORM_SIZE) {
-        throw new InvalidArgumentException('Plik jest za duży. Wybierz zdjęcie do 2 MB.');
+        throw new InvalidArgumentException('Plik jest za duży. Wybierz zdjęcie do 5 MB.');
     }
     if ($error === UPLOAD_ERR_NO_FILE) {
         throw new InvalidArgumentException('Najpierw wybierz zdjęcie z komputera.');
@@ -31,11 +31,11 @@ function uploadedFooterAdImage(?array $file): string
         throw new InvalidArgumentException('Nie da się odczytać pliku. Wybierz inne zdjęcie.');
     }
     if (strlen($bytes) > FOOTER_AD_MAX_IMAGE_BYTES) {
-        throw new InvalidArgumentException('Plik jest za duży. Wybierz zdjęcie do 2 MB.');
+        throw new InvalidArgumentException('Plik jest za duży. Wybierz zdjęcie do 5 MB.');
     }
     $image = @getimagesizefromstring($bytes);
-    if (!in_array($image['mime'] ?? '', ['image/jpeg', 'image/png', 'image/webp'], true)) {
-        throw new InvalidArgumentException('Wybierz poprawne zdjęcie JPG, PNG lub WebP.');
+    if (!in_array($image['mime'] ?? '', ['image/jpeg', 'image/png', 'image/webp', 'image/gif'], true)) {
+        throw new InvalidArgumentException('Wybierz poprawne zdjęcie JPG, PNG, WebP lub GIF.');
     }
     return $bytes;
 }
@@ -56,7 +56,7 @@ try {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $issue === null) {
     if ($_POST === [] && $_FILES === [] && (int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 0) {
-        flash('Serwer nie przyjął pliku. Spróbuj przesłać mniejsze zdjęcie (do 2 MB).', true);
+        flash('Serwer nie przyjął pliku. Spróbuj przesłać mniejsze zdjęcie (do 5 MB).', true);
         redirect('footer-ad-admin.php');
     }
     verifyPost();
@@ -95,7 +95,7 @@ pageStart('Zdjęcia reklam', 'ad-admin', $user);
     <?php elseif (!$ads): ?>
         <p class="notice">Nie ma reklam do edycji.</p>
     <?php else: ?>
-        <small class="gz-ad-editor__hint">Wybierz własny plik JPG, PNG lub WebP (do 2 MB). Zmieni się tylko zdjęcie, link pozostanie taki sam.</small>
+        <small class="gz-ad-editor__hint">Wybierz własny plik JPG, PNG, WebP lub GIF (do 5 MB). Zmieni się tylko zdjęcie, link pozostanie taki sam.</small>
         <?php foreach ($ads as $item): ?>
         <form class="panel gz-ad-editor__item" method="post" enctype="multipart/form-data"
               action="footer-ad-admin.php" aria-labelledby="ad-title-<?= h($item['id']) ?>">
@@ -110,7 +110,7 @@ pageStart('Zdjęcia reklam', 'ad-admin', $user);
             <?php endif; ?>
             <label for="ad-photo-<?= h($item['id']) ?>">Wybierz zdjęcie</label>
             <input id="ad-photo-<?= h($item['id']) ?>" type="file" name="ad_photo"
-                   accept="image/jpeg,image/png,image/webp" required>
+                   accept="image/jpeg,image/png,image/webp,image/gif" required>
             <button type="submit" class="primary">Zapisz zdjęcie</button>
         </form>
         <?php endforeach; ?>
