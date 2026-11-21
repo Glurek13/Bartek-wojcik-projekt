@@ -44,12 +44,12 @@ pageStart('Mój profil', 'profile', $user);
             <section class="panel" id="photo">
                 <h2>Zdjęcie profilowe</h2>
                 <?php if (isset($_GET['avatar'])) showFlash(); ?>
-                <p class="muted">JPG, PNG lub WEBP do 2 MB.</p>
+                <p class="muted">JPG, PNG, WEBP lub animowany GIF do 5 MB. Animacja będzie widoczna w profilu i przy wyszukiwarce.</p>
                 <form class="stack" method="post" action="actions.php" enctype="multipart/form-data">
                     <?php csrfField(); ?>
                     <input type="hidden" name="action" value="avatar">
                     <label for="avatarFile">Wybierz zdjęcie</label>
-                    <input id="avatarFile" name="avatar" type="file" accept="image/jpeg,image/png,image/webp" required>
+                    <input id="avatarFile" name="avatar" type="file" accept="image/jpeg,image/png,image/webp,image/gif,.gif" required>
                     <button type="submit" class="primary">Zapisz zdjęcie</button>
                 </form>
             </section>

@@ -14,7 +14,7 @@ function pageStart(string $title, string $page, ?array $user = null): void
     <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
     <link rel="stylesheet" href="../css/style.css?v=4">
     <link rel="stylesheet" href="../css/footer-ad.css?v=gif6">
-    <script src="../js/script.js?v=3" defer></script>
+    <script src="../js/script.js?v=avatar-gif" defer></script>
 </head>
 <body>
 <header class="site-header">

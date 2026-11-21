@@ -169,7 +169,7 @@ function initial(string $name): string
 
 function avatarFile(?string $path): ?string
 {
-    if (!$path || !preg_match('~\Auploads/avatars/[a-f0-9]{32}\.(jpg|png|webp)\z~', $path)) return null;
+    if (!$path || !preg_match('~\Auploads/avatars/[a-f0-9]{32}\.(jpg|png|webp|gif)\z~', $path)) return null;
     $file = dirname(__DIR__) . '/' . $path;
     return is_file($file) && is_readable($file) ? $file : null;
 }

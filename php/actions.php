@@ -39,17 +39,17 @@ function saveAvatar(int $id, ?string $previous): void
     $file = $_FILES['avatar'] ?? [];
     $error = $file['error'] ?? UPLOAD_ERR_NO_FILE;
     $tmp = $file['tmp_name'] ?? '';
-    if ($error === UPLOAD_ERR_INI_SIZE || $error === UPLOAD_ERR_FORM_SIZE || ($file['size'] ?? 0) > 2097152) {
-        throw new DomainException('Zdjęcie nie może przekraczać 2 MB.');
+    if ($error === UPLOAD_ERR_INI_SIZE || $error === UPLOAD_ERR_FORM_SIZE || ($file['size'] ?? 0) > 5242880) {
+        throw new DomainException('Zdjęcie lub GIF nie może przekraczać 5 MB. Jeśli PHP blokuje przesyłanie, sprawdź ustawienia upload_max_filesize i post_max_size.');
     }
     if ($error !== UPLOAD_ERR_OK || !is_string($tmp) || !is_uploaded_file($tmp)) {
         throw new DomainException('Nie udało się przesłać zdjęcia. Wybierz plik i spróbuj ponownie.');
     }
     $type = (new finfo(FILEINFO_MIME_TYPE))->file($tmp);
-    $allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+    $allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp', 'image/gif' => 'gif'];
     $size = @getimagesize($tmp);
     if (!isset($allowed[$type]) || !$size || ($size['mime'] ?? '') !== $type || $size[0] < 1 || $size[1] < 1 || max($size[0], $size[1]) > 4000) {
-        throw new DomainException('Wybierz zdjęcie JPG, PNG lub WEBP o wymiarach do 4000 × 4000 px.');
+        throw new DomainException('Wybierz JPG, PNG, WEBP lub GIF (również animowany) o wymiarach do 4000 × 4000 px.');
     }
     $folder = dirname(__DIR__) . '/uploads/avatars';
     if (!is_dir($folder) || !is_writable($folder)) {

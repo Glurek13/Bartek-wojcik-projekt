@@ -7,7 +7,7 @@ if (!$file) {
     http_response_code(404);
     exit;
 }
-$types = ['jpg' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp'];
+$types = ['jpg' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp', 'gif' => 'image/gif'];
 $size = filesize($file);
 if ($size === false) {
     http_response_code(404);
