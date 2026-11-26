@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Lis 21, 2026 at 12:28 PM
+-- Generation Time: Lis 26, 2026 at 10:11 AM
 -- Wersja serwera: 10.11.16-MariaDB
 -- Wersja PHP: 8.5.12
 
@@ -20,6 +20,42 @@ SET time_zone = "+00:00";
 --
 -- Baza danych: `gamezone`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `account_recovery_codes`
+--
+
+CREATE TABLE `account_recovery_codes` (
+  `user_id` int(11) NOT NULL,
+  `code_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `code_encrypted` varchar(255) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+--
+-- Zrzut danych tabeli `account_recovery_codes`
+--
+
+INSERT INTO `account_recovery_codes` (`user_id`, `code_hash`, `code_encrypted`, `created_at`) VALUES
+(7, '4fb9de7714c4df3691a5df5da9fa21ee4cb21c7c577f0d2f528240d34935c11d', 'v1:VQuQQXIiqwHqqCrvdauEPIqUePl0I7LXwuj73NhIzpOHLFjpk0DCMTUzt6RpHinKR2I08IOMSyGAGr6L', '2026-11-26 07:36:12');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `admin_invites`
+--
+
+CREATE TABLE `admin_invites` (
+  `id` int(11) NOT NULL,
+  `token_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `used_by` int(11) DEFAULT NULL,
+  `used_at` datetime DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
 -- --------------------------------------------------------
 
@@ -258,25 +294,36 @@ CREATE TABLE `users` (
   `email` varchar(190) NOT NULL,
   `password` varchar(255) NOT NULL DEFAULT '',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `avatar_path` varchar(255) DEFAULT NULL
+  `avatar_path` varchar(255) DEFAULT NULL,
+  `role` enum('user','admin') NOT NULL DEFAULT 'user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
 --
 -- Zrzut danych tabeli `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `created_at`, `avatar_path`) VALUES
-(1, 'Cirno', 'ass8@gmail.com', 'admin2137', '2026-10-29 09:10:44', 'uploads/avatars/b53da57d6be32bd34d3f0b6b4bdc8387.jpg'),
-(2, 'dddd', 'dd34@gmail.com', 'ZAQ!2wsx', '2026-11-02 08:59:45', NULL),
-(4, 'test2', 'test8@gmail.com', 'ZAQ!2wsx', '2026-11-09 09:50:23', 'uploads/avatars/3488c619dd3690b8e289a60f3abd3e88.gif'),
-(5, 'Relakaler', 'adsfasdf@wp.pl', 'SamiaMyBeloved', '2026-11-09 11:41:29', 'uploads/avatars/8bd3aae28ffa1b015041751fa83ee603.jpg'),
-(6, 'Senko', 'dupadupa@gmail.com', 'adminadmin', '2026-11-09 11:58:30', 'uploads/avatars/d4ab248598ff21232cae45a75a85b909.jpg'),
-(7, 'TomaszPerła', 'susiak123@gmail.com', 'Masło123', '2026-11-16 11:30:28', 'uploads/avatars/7857b49f7c3cd74038512bcb6c9f9ce2.jpg'),
-(8, 'kzdunek', 'susia5123@gmail.com', 'gówno123', '2026-11-19 09:54:46', NULL);
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `created_at`, `avatar_path`, `role`) VALUES
+(1, 'Cirno', 'ass8@gmail.com', 'admin2137', '2026-10-29 09:10:44', 'uploads/avatars/b53da57d6be32bd34d3f0b6b4bdc8387.jpg', 'user'),
+(2, 'dddd', 'dd34@gmail.com', 'ZAQ!2wsx', '2026-11-02 08:59:45', NULL, 'user'),
+(4, 'test2', 'test8@gmail.com', 'ZAQ!2wsx', '2026-11-09 09:50:23', 'uploads/avatars/3488c619dd3690b8e289a60f3abd3e88.gif', 'user'),
+(5, 'Relakaler', 'adsfasdf@wp.pl', 'SamiaMyBeloved', '2026-11-09 11:41:29', 'uploads/avatars/8bd3aae28ffa1b015041751fa83ee603.jpg', 'user'),
+(6, 'Senko', 'dupadupa@gmail.com', 'adminadmin', '2026-11-09 11:58:30', 'uploads/avatars/d4ab248598ff21232cae45a75a85b909.jpg', 'user'),
+(7, 'TomaszPerła', 'susiak123@gmail.com', '$2y$12$yxjtj3ohjAnbBCnQubBf0./8wzHFwBoPUwXU6SIT.MavypDdXChNy', '2026-11-16 11:30:28', 'uploads/avatars/ad32d768905d294464024f79da676d65.gif', 'user'),
+(8, 'kzdunek', 'susia5123@gmail.com', 'gówno123', '2026-11-19 09:54:46', NULL, 'user');
 
 --
 -- Indeksy dla zrzutów tabel
 --
+
+--
+-- Indeksy dla tabeli `admin_invites`
+--
+ALTER TABLE `admin_invites`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_admin_invite_hash` (`token_hash`),
+  ADD KEY `idx_admin_invites_expire` (`expires_at`,`used_at`),
+  ADD KEY `fk_admin_invites_created_by` (`created_by`),
+  ADD KEY `fk_admin_invites_used_by` (`used_by`);
 
 --
 -- Indeksy dla tabeli `categories`
@@ -350,6 +397,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT dla tabeli `admin_invites`
+--
+ALTER TABLE `admin_invites`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT dla tabeli `categories`
 --
 ALTER TABLE `categories`
@@ -394,6 +447,13 @@ ALTER TABLE `users`
 --
 -- Ograniczenia dla zrzutów tabel
 --
+
+--
+-- Ograniczenia dla tabeli `admin_invites`
+--
+ALTER TABLE `admin_invites`
+  ADD CONSTRAINT `fk_admin_invites_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_admin_invites_used_by` FOREIGN KEY (`used_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Ograniczenia dla tabeli `favorites`

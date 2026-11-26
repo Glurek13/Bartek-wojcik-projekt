@@ -106,7 +106,7 @@ pageStart('Świat gier', 'home', $user);
             <input type="hidden" name="action" value="review">
             <h3>Dodaj własną opinię</h3>
             <p class="muted">Możesz dodać jedną recenzję na grę.</p>
-            <?php if ($reviewedGames): ?><p class="muted">Swoje opinie możesz zmienić w sekcji <a href="profile.php#my-reviews">Moje recenzje</a>.</p><?php endif; ?>
+            <?php if ($reviewedGames): ?><p class="muted">Swoje opinie możesz edytować lub usuwać bezpośrednio pod nimi albo w sekcji <a href="profile.php#my-reviews">Moje recenzje</a>.</p><?php endif; ?>
             <label for="reviewGame">Gra</label>
             <select name="game_id" id="reviewGame" required>
                 <?php foreach ($reviewableGames as $game): ?><option value="<?= h($game['id']) ?>"><?= h($game['name']) ?></option><?php endforeach; ?>

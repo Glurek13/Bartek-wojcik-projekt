@@ -68,7 +68,10 @@ try {
                 throw new DomainException('Podaj ocenę od 1 do 10 i treść od 5 do 3000 znaków.');
             }
             changeRows('UPDATE reviews SET rating = ?, content = ? WHERE id = ? AND user_id = ?', [$rating, $content, $id, $viewer]);
-            $back = reviewPageUrl($id, $from, ['status' => 'review']);
+            // Inline editor: return to the same review card; the detail editor keeps its previous behavior.
+            $back = post('view') === 'list'
+                ? ($from === 'profile' ? 'profile.php?review=1#review-' . $id : 'index.php?review=1#review-' . $id)
+                : reviewPageUrl($id, $from, ['status' => 'review']);
             break;
         case 'delete':
             changeRows('DELETE FROM reviews WHERE id = ? AND user_id = ?', [$id, $viewer]);

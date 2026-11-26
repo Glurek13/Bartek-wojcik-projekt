@@ -66,3 +66,12 @@
     color: #fff;
     cursor: pointer;
 }
+
+/* Formularz dodawania reklam w panelu administratora. */
+.gz-ad-editor__create { margin: 1rem 0 1.5rem; }
+.gz-ad-editor__create h2 { margin-top: 0; }
+.gz-ad-editor__create .stack { display: grid; gap: .7rem; }
+.gz-ad-editor__create input[type="url"],
+.gz-ad-editor__create input[name="ad_title"] { width: 100%; max-width: 100%; }
+.gz-ad-editor__checkbox { display: flex; align-items: center; gap: .55rem; }
+.gz-ad-editor__checkbox input { width: auto; }

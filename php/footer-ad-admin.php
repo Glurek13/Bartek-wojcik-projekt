@@ -60,22 +60,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $issue === null) {
         redirect('footer-ad-admin.php');
     }
     verifyPost();
+    $action = post('ad_action');
     $id = post('ad_id');
     $byId = array_column($ads, null, 'id');
     try {
-        if (!isset($byId[$id])) {
-            throw new InvalidArgumentException('Nie znaleziono tej reklamy.');
+        if ($action === 'create') {
+            $title = trim(post('ad_title'));
+            $url = trim(post('ad_target_url'));
+            $scheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
+            if ($title === '' || textLength($title) > 150) {
+                throw new InvalidArgumentException('Tytuł reklamy musi mieć od 1 do 150 znaków.');
+            }
+            if (strlen($url) > 2048 || !in_array($scheme, ['https', 'http'], true) ||
+                !filter_var($url, FILTER_VALIDATE_URL) || !parse_url($url, PHP_URL_HOST)) {
+                throw new InvalidArgumentException('Podaj poprawny adres docelowy http:// lub https://.');
+            }
+            $file = $_FILES['ad_photo'] ?? null;
+            $bytes = uploadedFooterAdImage(is_array($file) ? $file : null);
+            $active = post('ad_active') === '1' ? 1 : 0;
+            $statement = db()->prepare(
+                'INSERT INTO footer_ads (title, target_url, image_data, is_active) VALUES (?, ?, ?, ?)'
+            );
+            $statement->bindValue(1, $title, PDO::PARAM_STR);
+            $statement->bindValue(2, $url, PDO::PARAM_STR);
+            $statement->bindValue(3, $bytes, PDO::PARAM_LOB);
+            $statement->bindValue(4, $active, PDO::PARAM_INT);
+            $statement->execute();
+            flash('Dodano reklamę „' . $title . '”.' . ($active ? ' Bierze udział w losowaniu.' : ' Reklama jest nieaktywna.'));
+        } elseif ($action === 'update_image') {
+            if (!isset($byId[$id])) {
+                throw new InvalidArgumentException('Nie znaleziono tej reklamy.');
+            }
+            $file = $_FILES['ad_photo'] ?? null;
+            $bytes = uploadedFooterAdImage(is_array($file) ? $file : null);
+            $statement = db()->prepare('UPDATE footer_ads SET image_data = ? WHERE id = ?');
+            $statement->bindValue(1, $bytes, PDO::PARAM_LOB);
+            $statement->bindValue(2, $id, PDO::PARAM_STR);
+            $statement->execute();
+            if ($statement->rowCount() === 0 && !getRow('SELECT id FROM footer_ads WHERE id = ?', [$id])) {
+                throw new InvalidArgumentException('Nie znaleziono tej reklamy.');
+            }
+            flash('Zapisano zdjęcie reklamy „' . $byId[$id]['title'] . '”.');
+        } else {
+            throw new InvalidArgumentException('Nieprawidłowa operacja reklamy.');
         }
-        $file = $_FILES['ad_photo'] ?? null;
-        $bytes = uploadedFooterAdImage(is_array($file) ? $file : null);
-        $statement = db()->prepare('UPDATE footer_ads SET image_data = ? WHERE id = ?');
-        $statement->bindValue(1, $bytes, PDO::PARAM_LOB);
-        $statement->bindValue(2, $id, PDO::PARAM_STR);
-        $statement->execute();
-        if ($statement->rowCount() === 0 && !getRow('SELECT id FROM footer_ads WHERE id = ?', [$id])) {
-            throw new InvalidArgumentException('Nie znaleziono tej reklamy.');
-        }
-        flash('Zapisano zdjęcie reklamy „' . $byId[$id]['title'] . '”.');
     } catch (InvalidArgumentException $exception) {
         flash($exception->getMessage(), true);
     } catch (PDOException $exception) {
@@ -88,8 +116,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $issue === null) {
 pageStart('Zdjęcia reklam', 'ad-admin', $user);
 ?>
 <main class="auth-page gz-ad-editor">
-    <h1>Zdjęcia reklam</h1>
+    <h1>Zarządzanie reklamami</h1>
+    <p class="muted">Dodawaj reklamy do losowej rotacji w stopce GameZone. Dostęp mają tylko administratorzy.</p>
     <?php showFlash(); ?>
+    <?php if ($issue === null): ?>
+    <section class="panel gz-ad-editor__create">
+        <h2>➕ Dodaj nową reklamę</h2>
+        <form method="post" enctype="multipart/form-data" action="footer-ad-admin.php" class="stack">
+            <?php csrfField(); ?>
+            <input type="hidden" name="ad_action" value="create">
+            <label for="new-ad-title">Tytuł reklamy</label>
+            <input id="new-ad-title" name="ad_title" maxlength="150" required placeholder="Np. Nowy zwiastun gry">
+            <label for="new-ad-url">Link po kliknięciu reklamy</label>
+            <input id="new-ad-url" name="ad_target_url" type="url" maxlength="2048" required placeholder="https://example.com/">
+            <label for="new-ad-photo">Zdjęcie lub animowany GIF (maks. 5 MB)</label>
+            <input id="new-ad-photo" name="ad_photo" type="file" accept="image/jpeg,image/png,image/webp,image/gif" required>
+            <label class="gz-ad-editor__checkbox"><input type="checkbox" name="ad_active" value="1" checked> Reklama aktywna (uwzględniaj w losowaniu)</label>
+            <button class="primary" type="submit">Dodaj reklamę</button>
+        </form>
+    </section>
+    <?php endif; ?>
+    <h2>Istniejące reklamy</h2>
     <?php if ($issue !== null): ?>
         <p class="notice error" role="status"><?= h($issue) ?></p>
     <?php elseif (!$ads): ?>
@@ -100,6 +147,7 @@ pageStart('Zdjęcia reklam', 'ad-admin', $user);
         <form class="panel gz-ad-editor__item" method="post" enctype="multipart/form-data"
               action="footer-ad-admin.php" aria-labelledby="ad-title-<?= h($item['id']) ?>">
             <?php csrfField(); ?>
+            <input type="hidden" name="ad_action" value="update_image">
             <input type="hidden" name="ad_id" value="<?= h($item['id']) ?>">
             <h2 id="ad-title-<?= h($item['id']) ?>"><?= h($item['title']) ?></h2>
             <?php if ($item['is_active']): ?>

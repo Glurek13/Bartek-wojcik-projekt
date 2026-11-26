@@ -131,17 +131,52 @@ function showFlash(): void
     echo '<p class="notice' . ($message['error'] ? ' error' : '') . '" role="status">' . h($message['message']) . '</p>';
 }
 
+/** Czy konto ma kod, ktory wlasciciel moze odczytac i wykorzystac? */
+function recoveryCodeIsPresent(int $userId): bool
+{
+    require_once __DIR__ . '/recovery.php';
+    try {
+        return accountRecoveryCode($userId) !== null;
+    } catch (Throwable $error) {
+        error_log('GameZone recovery availability check: ' . get_class($error));
+        return false;
+    }
+}
+
 function signedInUser(): array
 {
     if (empty($_SESSION['user_id'])) {
         if (wantsJson()) jsonReply(['error' => 'Sesja wygasła. Zaloguj się ponownie.'], 401);
         redirect('login.php');
     }
-    $user = getRow('SELECT id, username, email, created_at, avatar_path FROM users WHERE id = ?', [(int) $_SESSION['user_id']]);
+    $user = getRow('SELECT id, username, email, created_at, avatar_path, role FROM users WHERE id = ?', [(int) $_SESSION['user_id']]);
     if (!$user) {
         unset($_SESSION['user_id'], $_SESSION['username']);
         if (wantsJson()) jsonReply(['error' => 'Sesja wygasła. Zaloguj się ponownie.'], 401);
         redirect('login.php');
+    }
+    // Starsze konta bez kodu musza go utworzyc, zanim przejda dalej.
+    // Profil i operacje na profilu oraz pliki awatarow pozostaja dostepne.
+    $page = basename((string) ($_SERVER['SCRIPT_NAME'] ?? ''));
+    if (!in_array($page, ['profile.php', 'actions.php', 'avatar.php'], true) && !recoveryCodeIsPresent((int) $user['id'])) {
+        if (wantsJson()) jsonReply(['error' => 'Najpierw wygeneruj kod odzyskiwania w profilu.'], 403);
+        redirect('profile.php?recovery=required#account-info');
+    }
+    return $user;
+}
+
+function isAdmin(?array $user): bool
+{
+    return ($user['role'] ?? 'user') === 'admin';
+}
+
+function adminOnly(): array
+{
+    $user = signedInUser();
+    if (!isAdmin($user)) {
+        if (wantsJson()) jsonReply(['error' => 'Brak uprawnień administratora.'], 403);
+        http_response_code(403);
+        exit('Brak uprawnień administratora.');
     }
     return $user;
 }
@@ -174,11 +209,22 @@ function avatarFile(?string $path): ?string
     return is_file($file) && is_readable($file) ? $file : null;
 }
 
+/**
+ * Generuje avatar dla dowolnego autora, nie tylko aktualnie zalogowanego.
+ * Brak zdjecia: domyslny fioletowy PNG z rzeczywista przezroczystoscia.
+ * Nie przetwarzamy GIF-ow; zachowuja animacje w elemencie <img>.
+ */
 function avatarMarkup(array $user): void
 {
-    echo '<span class="avatar-initial" aria-hidden="true">' . h(initial($user['username'])) . '</span>';
-    if (avatarFile($user['avatar_path'])) {
-        echo '<img class="avatar-image" hidden alt="" src="avatar.php?v=' . h(substr(hash('sha256', $user['avatar_path']), 0, 16)) . '">';
+    echo '<img class="avatar-fallback" src="../assets/default-avatar.png" alt="" width="40" height="40" loading="lazy">';
+
+    $ownerId = filter_var($user['id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+    $avatarPath = $user['avatar_path'] ?? null;
+    if ($ownerId && is_string($avatarPath) && avatarFile($avatarPath)) {
+        $file = avatarFile($avatarPath);
+        $version = substr(hash('sha256', $avatarPath . ':' . ($file ? (string) filemtime($file) : '')), 0, 16);
+        echo '<img class="avatar-image" hidden alt="" loading="eager" decoding="async"'
+           . ' src="avatar.php?user_id=' . h($ownerId) . '&amp;v=' . h($version) . '">';
     }
 }
 

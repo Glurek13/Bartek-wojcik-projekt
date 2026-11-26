@@ -22,9 +22,12 @@ function fetchReviews(int $viewer, ?int $author = null, ?int $reviewId = null): 
            (mine.user_id IS NOT NULL) AS liked'
         : '0 AS like_count, 0 AS comment_count, 0 AS liked';
     $query = 'SELECT r.id, r.game_id, r.user_id, r.author, r.rating, r.content, r.created_at,
+                     COALESCE(author_user.username, r.author) AS display_author,
+                     author_user.avatar_path AS author_avatar_path,
                      g.name AS game_name, ' . $counts . '
               FROM reviews AS r
-              JOIN games AS g ON g.id = r.game_id';
+              JOIN games AS g ON g.id = r.game_id
+              LEFT JOIN users AS author_user ON author_user.id = r.user_id';
     $where = [];
     $params = [];
     if ($interactions) {

@@ -21,7 +21,7 @@ $isOwner = $review['user_id'] !== null && (int) $review['user_id'] === $viewer;
 $editing = $isOwner && isset($_GET['edit']);
 $deleting = $isOwner && isset($_GET['delete']);
 $interactions = reviewInteractionsAvailable();
-$comments = $interactions ? getRows('SELECT c.id, c.user_id, c.content, c.created_at, u.username
+$comments = $interactions ? getRows('SELECT c.id, c.user_id, c.content, c.created_at, u.username, u.avatar_path
                      FROM review_comments AS c JOIN users AS u ON u.id = c.user_id
                      WHERE c.review_id = ? ORDER BY c.created_at, c.id', [$id]) : [];
 $myCommentId = null;
@@ -76,7 +76,13 @@ pageStart('Recenzja: ' . $review['game_name'], 'review', $user);
             <?php foreach ($comments as $comment): ?>
             <li id="comment-<?= h($comment['id']) ?>">
                 <div class="comment-heading">
-                    <strong><?= h($comment['username']) ?></strong>
+                    <div class="author-id">
+                        <span class="avatar avatar-small" aria-hidden="true"><?php avatarMarkup([
+                            'id' => $comment['user_id'],
+                            'avatar_path' => $comment['avatar_path'],
+                        ]); ?></span>
+                        <strong><?= h($comment['username']) ?></strong>
+                    </div>
                     <small><?= h(displayDate($comment['created_at'])) ?></small>
                 </div>
                 <p><?= h($comment['content']) ?></p>
@@ -85,6 +91,14 @@ pageStart('Recenzja: ' . $review['game_name'], 'review', $user);
                     <?php reviewActionFields('delete-comment', $id, $from); ?>
                     <input type="hidden" name="comment_id" value="<?= h($comment['id']) ?>">
                     <button class="review-button" type="submit">Usuń swój komentarz</button>
+                </form>
+                <?php elseif (isAdmin($user)): ?>
+                <form method="post" action="admin-actions.php" data-confirm="Na pewno usunąć komentarz tego użytkownika?">
+                    <?php csrfField(); ?>
+                    <input type="hidden" name="action" value="delete_comment">
+                    <input type="hidden" name="origin" value="review">
+                    <input type="hidden" name="comment_id" value="<?= h($comment['id']) ?>">
+                    <button class="review-button review-delete-link" type="submit">🛡️ Usuń komentarz jako administrator</button>
                 </form>
                 <?php endif; ?>
             </li>

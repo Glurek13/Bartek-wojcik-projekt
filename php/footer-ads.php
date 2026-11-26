@@ -5,41 +5,43 @@ const FOOTER_AD_MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 function footerAdAdminAllowed(?array $user): bool
 {
-    if (!isset($user['username'])) {
-        return false;
-    }
-    $config = __DIR__ . '/footer-ad-admin-config.php';
-    $ownerUsername = is_file($config) ? (require $config) : '';
-    return is_string($ownerUsername) && $ownerUsername !== '' && $user['username'] === $ownerUsername;
+    // Role are checked on the server; selecting a role in the form is not enough.
+    return isAdmin($user);
 }
 
-function nextFooterAd(array $rows, ?string $previousUrl): ?array
+/**
+ * Pick one active advertisement at random for each complete page request.
+ * Every valid row has the same chance, including ads that share a target URL.
+ * This deliberately does not remember the last ad: with only two ads, a
+ * no-repeat policy would simply alternate them in a predictable order.
+ *
+ * @param array<int, array<string, mixed>> $rows
+ * @return array<string, mixed>|null
+ */
+function randomFooterAd(array $rows): ?array
 {
     $ads = [];
     foreach ($rows as $row) {
-        $url = trim((string) $row['target_url']);
+        $id = (int) ($row['id'] ?? 0);
+        $url = trim((string) ($row['target_url'] ?? ''));
         $scheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
-        if (!in_array($scheme, ['https', 'http'], true) || !filter_var($url, FILTER_VALIDATE_URL)) {
+        if ($id < 1 || !in_array($scheme, ['https', 'http'], true) || !filter_var($url, FILTER_VALIDATE_URL)) {
             continue;
         }
-        if (!isset($ads[$url])) {
-            $row['target_url'] = $url;
-            $ads[$url] = $row;
-        }
+        $row['target_url'] = $url;
+        $ads[] = $row;
     }
-    if (!$ads) {
+
+    if ($ads === []) {
         return null;
     }
 
-    $urls = array_keys($ads);
-    $last = array_search($previousUrl, $urls, true);
-    $next = $last === false ? 0 : ($last + 1) % count($urls);
-    return $ads[$urls[$next]];
+    return $ads[random_int(0, count($ads) - 1)];
 }
 
 function footerAdForPage(): ?array
 {
-    // On pages without a database connection (login and registration), skip the ad.
+    // The login and registration pages can work without an active DB connection.
     $pdo = connection(false);
     if ($pdo === null) {
         return null;
@@ -48,7 +50,7 @@ function footerAdForPage(): ?array
     try {
         $rows = $pdo->query(
             'SELECT id, title, target_url FROM footer_ads WHERE is_active = 1 ' .
-            'AND OCTET_LENGTH(image_data) BETWEEN 1 AND ' . FOOTER_AD_MAX_IMAGE_BYTES . ' ORDER BY id ASC'
+            'AND OCTET_LENGTH(image_data) BETWEEN 1 AND ' . FOOTER_AD_MAX_IMAGE_BYTES
         )->fetchAll();
     } catch (PDOException $error) {
         if ((string) $error->getCode() !== '42S02') {
@@ -57,10 +59,5 @@ function footerAdForPage(): ?array
         return null;
     }
 
-    $previous = $_SESSION['gz_footer_ad_previous_url'] ?? null;
-    $ad = nextFooterAd($rows, is_string($previous) ? $previous : null);
-    if ($ad !== null) {
-        $_SESSION['gz_footer_ad_previous_url'] = $ad['target_url'];
-    }
-    return $ad;
+    return randomFooterAd($rows);
 }

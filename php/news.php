@@ -48,6 +48,9 @@ if (!$available) {
 pageStart($article['title'] ?? 'Aktualności gamingowe', 'news', $user);
 ?>
 <main class="news-page">
+    <?php if (isAdmin($user)): ?>
+    <p class="news-admin-link"><a class="secondary" href="admin.php#admin-news">🛡️ Dodaj lub usuń aktualności</a></p>
+    <?php endif; ?>
     <?php if ($isDetail): ?>
     <a class="news-back" href="news.php">← Wszystkie aktualności</a>
     <?php endif; ?>

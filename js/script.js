@@ -1,12 +1,16 @@
 "use strict";
 
 document.querySelectorAll(".avatar-image").forEach(image => {
-    const initial = image.parentElement.querySelector(".avatar-initial");
-    const showPhoto = () => { image.hidden = false; initial.hidden = true; };
-    const showInitial = () => { image.hidden = true; initial.hidden = false; };
+    const fallback = image.parentElement.querySelector(".avatar-fallback");
+    if (!fallback) return;
+    const showPhoto = () => { image.hidden = false; fallback.hidden = true; };
+    const showFallback = () => { image.hidden = true; fallback.hidden = false; };
     image.addEventListener("load", showPhoto);
-    image.addEventListener("error", showInitial);
-    if (image.complete && image.naturalWidth > 0) showPhoto();
+    image.addEventListener("error", showFallback);
+    if (image.complete) {
+        if (image.naturalWidth > 0) showPhoto();
+        else if (image.naturalWidth === 0) showFallback();
+    }
 });
 
 document.querySelectorAll("[data-toggle-password]").forEach(button => {
@@ -202,3 +206,12 @@ document.addEventListener("submit", async event => {
         button.removeAttribute("aria-disabled");
     }
 });
+
+
+// Confirmation before irreversible admin deletions; backend enforces permissions and CSRF.
+document.addEventListener("submit", event => {
+    const form = event.target;
+    if (!(form instanceof HTMLFormElement)) return;
+    const message = form.getAttribute("data-confirm");
+    if (message && !window.confirm(message)) event.preventDefault();
+}, true);
